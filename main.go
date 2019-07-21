@@ -1,24 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 
-	"github.com/wicoady1/gtdr-score-parser/imageextractor"
+	"github.com/julienschmidt/httprouter"
+	linkRouter "github.com/wicoady1/gtdr-score-parser/router"
 )
 
 func main() {
-	const IMAGE_PATH = "asset/S__9953338.jpg"
+	router := httprouter.New()
+	router.GET("/", linkRouter.Index)
+	router.POST("/uploadfile", linkRouter.UploadFile)
+	router.GET("/resultimage", linkRouter.ResultImage)
+	router.POST("/resultimage", linkRouter.ResultImage)
+	router.ServeFiles("/sources/*filepath", http.Dir("sources"))
+	router.ServeFiles("/asset/*filepath", http.Dir("asset"))
 
-	Ie, _ := imageextractor.New(IMAGE_PATH)
-	//extract player stats
-	moneyScore, _ := Ie.Extractor(imageextractor.MoneyScore)
-	playDate, _ := Ie.Extractor(imageextractor.PlayDate)
-	playTime, _ := Ie.Extractor(imageextractor.PlayTime)
-	title, _ := Ie.Extractor(imageextractor.TitleJpn)
-	rate, _ := Ie.Extractor(imageextractor.AchievementRate)
+	log.Println("Serving on 8080")
 
-	fmt.Println("Extracted Title:", title)
-	fmt.Println("Extracted Score:", moneyScore)
-	fmt.Println("Extracted Play Date:", playDate, playTime)
-	fmt.Println("Extracted Achievement Rate:", rate, "%")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }

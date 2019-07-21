@@ -51,6 +51,11 @@ func New(imagePath string) (ImageExtractor, error) {
 		log.Fatal("Error when loading image", err)
 	}
 
+	validErr := validateImage(rawImage)
+	if validErr != nil {
+		return ImageExtractor{}, validErr
+	}
+
 	//get image size
 	width := rawImage.Bounds().Dx()
 	height := rawImage.Bounds().Dy()
@@ -198,4 +203,11 @@ func (ie *ImageExtractor) extractSelector(extractType int) (goserractConfig, ima
 	default:
 		return goserractConfig{}, imageExtractConfig{}, fmt.Errorf("Extract type not found")
 	}
+}
+
+func validateImage(input image.Image) error {
+	if input.Bounds().Dx() != 600 || input.Bounds().Dy() != 480 {
+		return fmt.Errorf("seems like the picture is not taken from eamuse app")
+	}
+	return nil
 }

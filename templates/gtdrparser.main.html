@@ -1,0 +1,168 @@
+{{define "gtdrparser.main.html"}}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="sources/code/css/reset.css" />
+<link rel="stylesheet" href="sources/code/css/text.css" />
+<link rel="stylesheet" href="sources/code/css/demo.css" /> -->
+<link rel="stylesheet" href="sources/code/css/960.css" />
+<link rel="stylesheet" href="sources/style.css" />
+<html>
+<head>
+       <title>Upload file</title>
+</head>
+<body>
+    <div class="container_12">
+        <!-- header -->
+        <div id="header">
+        </div>
+
+        <!-- content -->
+        <div id="top_bg">
+            <div class="grid_8 prefix_2" id="loading" style="display: none;">
+                <center><img src="/sources/img/loading.gif" id="loading_img"></center>
+            </div>
+            <div id="upload_form">
+                <div id="how_to">
+                    <div class="grid_4 prefix_4 suffix_4 title">
+                        How to Upload?
+                    </div>
+                    <div class="grid_8 prefix_2 content">
+                        1. Prepare eAmusement App Playshare Score in your phone. Format will be like this
+                        <img src="/sources/img/sample.jpg" style="width: 300px; height: 240px;">
+                    </div>
+                    <div class="grid_8 prefix_2 content">
+                        2. Click "Choose File" and Click the image
+                    </div>
+                    <div class="grid_8 prefix_2 content">
+                        3. Click Upload
+                    </div>
+                    <div class="grid_8 prefix_2 content">
+                        4. Page will parse your image information into text format
+                    </div>
+                </div>
+
+                <div class="grid_4 prefix_4 suffix_4 title">
+                    Upload Form
+                </div>
+                <div class="grid_8 prefix_2">
+                    <form enctype="multipart/form-data" action="http://127.0.0.1:8080/uploadfile" method="POST">
+                        <div>
+                            <div class="grid_3 prefix_1">
+                                    Image
+                            </div>
+                            <div class="grid_2">
+                                    <input type="file" name="uploadfile" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="grid_3 prefix_1">
+                                    Song Title Language
+                            </div>
+                            <div class="grid_2">
+                                    <select id="title_language" name="title_language">
+                                        <option value="eng">English</option>
+                                        <option value="jpn">Japanese</option>
+                                    </select>
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" name="token" value="{{.Token}}"/>
+                        <div>
+                            <div class="grid_2 prefix_3" style="padding-top: 2em;">
+                                <center>
+                                    <input type="button" id="submit" value="Upload" />
+                                </center>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="error" style="display: none;">
+                <div class="grid_8 prefix_2 content">
+                    <h3>Error on processing image. Double check your uploaded image.</h3><br>
+                    <input type="button" class="back_button" value="Back" />
+                </div>
+            </div>
+            <div id="result" style="display: none;">
+                <div class="grid_8 prefix_2 content">
+                    <h3>Image</h3><br>
+                    <img id="resp_image" style="width: 300px; height: 240px;"><br>
+                    <h3>Title</h3><br>
+                    <label id="resp_title"></label><br>
+                    <h3>Score</h3><br>
+                    <label id="resp_score"></label><br>
+                    <h3>Timestamp</h3><br>
+                    <label id="resp_timestamp"></label><br>
+                    <h3>Achievement Rate</h3><br>
+                    <label id="resp_rate"></label><br>
+                </div>
+                
+                <input type="button" class="back_button" value="Back" />
+            </div>
+
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div id="footer">
+        <div class="container_12">
+            <a href="https://facebook.com/wicoady1">
+                <img src="/sources/img/fb_ico.png" id="icon_img">
+            </a>
+            <a href="https://github.com/wicoady1">
+                <img src="/sources/img/github_ico.png" id="icon_img">
+            </a><br>
+            Website Powered by wicoady1<br>
+            <div class="grid_2 prefix_5 suffix_5"><hr></div>
+            GITADORA is Copyrighted to Konami Amusement<br>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function(){
+        jQuery('#submit').bind('click', function() {
+
+            //alert('apalah');
+            var formData = new FormData();
+            formData.append('title_language', $("#title_language").val());
+            formData.append('upload_file', $('input[type=file]')[0].files[0]); 
+
+            jQuery.ajax('http://127.0.0.1:8080/uploadfile', {
+                type: 'POST',  // http method
+                data: formData,
+                enctype: 'multipart/form-data',
+                processData: false,  // Important!
+                contentType:false,
+                beforeSend: function( xhr, obj ) {
+                    $('#upload_form').hide();
+                    $('#loading').show();
+                },
+                success: function (data, status, xhr) {
+                    $('#result').show();
+
+                    $('#resp_image').attr("src",data.image_path);
+                    $('#resp_title').text(data.title);
+                    $('#resp_score').text(data.score);
+                    $('#resp_timestamp').text(data.play_timestamp);
+                    $('#resp_rate').text(data.rate);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    $('#error').show();
+                },
+                complete: function ( xhr, status) {
+                    $('#loading').hide();
+                }
+            });
+        });
+
+
+        jQuery('.back_button').bind('click', function() {
+            $('#upload_form').show();
+            $('#result').hide();
+            $('#error').hide();
+        });
+    }); 
+    </script>
+{{end}}

@@ -1,0 +1,77 @@
+body {
+    background-image: url("/sources/img/background_p.jpg");
+    background-repeat: no-repeat;
+    margin: 0 0 0 0 !important;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+h2 {
+    line-height: 1.5em;
+}
+
+#header {
+    background-image: url("/sources/img/header_new.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 25em;
+}
+
+#top_bg{
+    background-image: url("/sources/img/body_top_bg.jpg");
+    background-color: #eaeceb;
+    background-repeat: no-repeat;
+    height: 50em;
+}
+
+#footer {
+    height: 10em;
+    background-color: dimgrey;
+    text-align: center;
+    padding-top: 2em;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    line-height: 1.5em;
+}
+
+#icon_img {
+    width: 2em;
+    height: 2em;
+    margin: 1em 0.5em 0em 0.5em;
+}
+
+#how_to {
+    padding-top: 2em;
+    text-align: center;
+}
+
+#loading_img {
+    width: 50%;
+    height: 50%;
+}
+
+#upload_form{
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.title{
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.content{
+    line-height: 1.5em;
+}
+
+#result {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
