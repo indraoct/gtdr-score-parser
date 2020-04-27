@@ -62,8 +62,6 @@ func New(imagePath string) (ImageExtractor, error) {
 
 	//double image size and increase the contrast
 	rawImage = imaging.Resize(rawImage, width*2, height*2, imaging.Lanczos)
-	rawImage = imaging.AdjustContrast(rawImage, 100)
-	rawImage = imaging.AdjustBrightness(rawImage, -80)
 
 	return ImageExtractor{
 		image: rawImage,
@@ -80,6 +78,7 @@ func (ie *ImageExtractor) Extractor(extractType int) (string, error) {
 
 	//crop image
 	image := imaging.Crop(ie.image, image.Rect(imageConfig.x0, imageConfig.y0, imageConfig.x1, imageConfig.y1))
+	image = imaging.Invert(image)
 
 	//generate image to path
 	out, err := os.Create(gosseractConfig.Image)
@@ -128,7 +127,7 @@ func (ie *ImageExtractor) extractSelector(extractType int) (goserractConfig, ima
 				x0: 640,
 				y0: 450,
 				x1: 740,
-				y1: 480,
+				y1: 500,
 			},
 			nil
 	case PlayDate:
@@ -155,7 +154,7 @@ func (ie *ImageExtractor) extractSelector(extractType int) (goserractConfig, ima
 				x0:            1100,
 				y0:            40,
 				x1:            1200,
-				y1:            70,
+				y1:            72,
 				CleanAllSpace: true,
 			},
 			nil
@@ -168,7 +167,7 @@ func (ie *ImageExtractor) extractSelector(extractType int) (goserractConfig, ima
 			imageExtractConfig{
 				x0: 180,
 				y0: 300,
-				x1: 1200,
+				x1: 1100,
 				y1: 340,
 			},
 			nil
@@ -182,7 +181,7 @@ func (ie *ImageExtractor) extractSelector(extractType int) (goserractConfig, ima
 			imageExtractConfig{
 				x0: 180,
 				y0: 300,
-				x1: 1200,
+				x1: 1100,
 				y1: 340,
 			},
 			nil
@@ -196,7 +195,7 @@ func (ie *ImageExtractor) extractSelector(extractType int) (goserractConfig, ima
 				x0:            620,
 				y0:            790,
 				x1:            720,
-				y1:            820,
+				y1:            840,
 				CleanAllSpace: true,
 			},
 			nil
